@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Factura ByteStore</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', Arial, sans-serif;
+            background-color: #f5f5f5;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .factura-container {
+            max-width: 800px;
+            margin: 20px auto;
+            background: white;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .header-section {
+            background: linear-gradient(135deg, #007bff, #0056b3);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .company-info {
+            margin-bottom: 20px;
+        }
+
+        .company-name {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .company-details {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        .pdf-button {
+            background: #28a745;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 5px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            margin: 15px 0;
+            transition: background 0.3s;
+        }
+
+        .pdf-button:hover {
+            background: #218838;
+        }
+
+        .factura-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 30px;
+            border-bottom: 2px solid #e9ecef;
+        }
+
+        .factura-title {
+            color: #007bff;
+            font-size: 24px;
+            font-weight: 700;
+        }
+
+        .factura-numero {
+            color: #dc3545;
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .cliente-section {
+            padding: 20px 30px;
+            background: #f8f9fa;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        .cliente-info {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            border-left: 4px solid #007bff;
+        }
+
+        .cliente-item {
+            margin-bottom: 8px;
+            font-size: 16px;
+        }
+
+        .cliente-label {
+            font-weight: 600;
+            color: #495057;
+        }
+
+        .productos-section {
+            padding: 20px 30px;
+        }
+
+        .productos-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+
+        .productos-table th {
+            background: #007bff;
+            color: white;
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        .productos-table td {
+            padding: 15px;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        .productos-table tr:nth-child(even) {
+            background: #f8f9fa;
+        }
+
+        .totales-section {
+            padding: 20px 30px;
+            background: #f8f9fa;
+        }
+
+        .totales-container {
+            display: flex;
+            justify-content: flex-end;
+        }
+
+        .totales-item {
+            background: #e9ecef;
+            padding: 15px 25px;
+            margin-left: 15px;
+            border-radius: 5px;
+            text-align: center;
+            min-width: 150px;
+        }
+
+        .totales-label {
+            font-size: 14px;
+            color: #6c757d;
+            margin-bottom: 5px;
+        }
+
+        .totales-valor {
+            font-size: 18px;
+            font-weight: 700;
+            color: #495057;
+        }
+
+        .footer-section {
+            padding: 20px 30px;
+            text-align: center;
+            background: #343a40;
+            color: white;
+        }
+
+        .footer-text {
+            font-size: 14px;
+            opacity: 0.8;
+        }
+
+        .back-button {
+            background: #6c757d;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-size: 14px;
+            cursor: pointer;
+            margin-top: 15px;
+            transition: background 0.3s;
+        }
+
+        .back-button:hover {
+            background: #5a6268;
+        }
+
+        @media print {
+            body {
+                background: white;
+            }
+            .factura-container {
+                box-shadow: none;
+                margin: 0;
+            }
+            .pdf-button, .back-button {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="factura-container">
+        <!-- Header con información de la empresa -->
+        <div class="header-section">
+            <div class="company-info">
+                <div class="company-name">BYTE STORE</div>
+                <div class="company-details">
+                    Tegucigalpa, Honduras C.A.<br>
+                    www.bytestore.com<br>
+                    info@bytestore.com
+                </div>
+            </div>
+            <button class="pdf-button" onclick="window.print()">
+                <i class="fas fa-file-pdf"></i> Clic para crear PDF
+            </button>
+        </div>
+
+        <!-- Información de la empresa repetida -->
+        <div style="padding: 15px 30px; background: #f8f9fa; text-align: center; border-bottom: 1px solid #e9ecef;">
+            <strong>BYTE STORE</strong> - Tegucigalpa, Honduras C.A.<br>
+            www.bytestore.com - info@bytestore.com
+        </div>
+
+        <!-- Encabezado de la factura -->
+        <div class="factura-header">
+            <div class="factura-title">Factura</div>
+            <div class="factura-numero">Factura No: <span id="facturaNumero"></span></div>
+        </div>
+
+        <!-- Información del cliente -->
+        <div class="cliente-section">
+            <div class="cliente-info">
+                <div class="cliente-item">
+                    <span class="cliente-label">Cliente:</span> <span id="clienteNombre"></span>
+                </div>
+                <div class="cliente-item">
+                    <span class="cliente-label">Dirección:</span> <span id="clienteDireccion"></span>
+                </div>
+                <div class="cliente-item">
+                    <span class="cliente-label">Teléfono:</span> <span id="clienteTelefono"></span>
+                </div>
+                <div class="cliente-item">
+                    <span class="cliente-label">Fecha:</span> <span id="fechaFactura"></span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tabla de productos -->
+        <div class="productos-section">
+            <table class="productos-table">
+                <thead>
+                    <tr>
+                        <th>Cantidad</th>
+                        <th>Descripción</th>
+                        <th>Precio</th>
+                        <th>Total</th>
+                    </tr>
+                </thead>
+                <tbody id="productosTableBody">
+                    <!-- Los productos se cargarán dinámicamente -->
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Totales -->
+        <div class="totales-section">
+            <div class="totales-container">
+                <div class="totales-item">
+                    <div class="totales-label">Subtotal:</div>
+                    <div class="totales-valor">L<span id="subtotal">0.00</span></div>
+                </div>
+                <div class="totales-item">
+                    <div class="totales-label">ISV (15%):</div>
+                    <div class="totales-valor">L<span id="isv">0.00</span></div>
+                </div>
+                <div class="totales-item">
+                    <div class="totales-label">Total a pagar:</div>
+                    <div class="totales-valor">L<span id="total">0.00</span></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer-section">
+            <div class="footer-text">
+                ¡Gracias por su compra!<br>
+                Para cualquier consulta, contáctenos al info@bytestore.com
+            </div>
+            <button class="back-button" onclick="window.location.href='index.html'">
+                <i class="fas fa-home"></i> Volver al Inicio
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // Función para generar número de factura único
+        function generarNumeroFactura() {
+            const fecha = new Date();
+            const año = fecha.getFullYear();
+            const numero = Math.floor(Math.random() * 10000).toString().padStart(4, '0');
+            return año + numero;
+        }
+
+        // Función para formatear fecha
+        function formatearFecha() {
+            const fecha = new Date();
+            const dia = fecha.getDate().toString().padStart(2, '0');
+            const mes = (fecha.getMonth() + 1).toString().padStart(2, '0');
+            const año = fecha.getFullYear();
+            const hora = fecha.getHours().toString().padStart(2, '0');
+            const minutos = fecha.getMinutes().toString().padStart(2, '0');
+            const segundos = fecha.getSeconds().toString().padStart(2, '0');
+            
+            return `${dia}/${mes}/${año} - ${hora}:${minutos}:${segundos}`;
+        }
+
+        // Función para formatear números como moneda
+        function formatearMoneda(valor) {
+            return parseFloat(valor).toFixed(2);
+        }
+
+        // Función para cargar datos de la factura
+        function cargarFactura() {
+            // Obtener datos del localStorage o usar valores por defecto
+            const facturaData = JSON.parse(localStorage.getItem('facturaData') || '{}');
+            
+            // Generar número de factura
+            const numeroFactura = facturaData.numero || generarNumeroFactura();
+            
+            // Cargar datos del cliente
+            const clienteNombre = facturaData.cliente || 'Cliente';
+            const clienteDireccion = facturaData.direccion || 'Dirección';
+            const clienteTelefono = facturaData.telefono || 'Teléfono';
+            const fecha = formatearFecha();
+            
+            // Actualizar elementos en la página
+            document.getElementById('facturaNumero').textContent = numeroFactura;
+            document.getElementById('clienteNombre').textContent = clienteNombre;
+            document.getElementById('clienteDireccion').textContent = clienteDireccion;
+            document.getElementById('clienteTelefono').textContent = clienteTelefono;
+            document.getElementById('fechaFactura').textContent = fecha;
+            
+            // Cargar productos del carrito
+            const productos = JSON.parse(localStorage.getItem('byteStoreCart') || '[]');
+            const tablaBody = document.getElementById('productosTableBody');
+            
+            let subtotal = 0;
+            
+            if (productos.length > 0) {
+                productos.forEach(producto => {
+                    const fila = document.createElement('tr');
+                    const totalProducto = producto.price * producto.quantity;
+                    subtotal += totalProducto;
+                    
+                    fila.innerHTML = `
+                        <td>${producto.quantity}</td>
+                        <td>${producto.name}</td>
+                        <td>L${formatearMoneda(producto.price)}</td>
+                        <td>L${formatearMoneda(totalProducto)}</td>
+                    `;
+                    tablaBody.appendChild(fila);
+                });
+            } else {
+                // Si no hay productos, mostrar pago de cuotas
+                const montoPago = facturaData.monto || 0;
+                subtotal = parseFloat(montoPago);
+                
+                const fila = document.createElement('tr');
+                fila.innerHTML = `
+                    <td>1</td>
+                    <td>Pago de Cuotas - ByteStore</td>
+                    <td>L${formatearMoneda(subtotal)}</td>
+                    <td>L${formatearMoneda(subtotal)}</td>
+                `;
+                tablaBody.appendChild(fila);
+            }
+            
+            // Calcular ISV y total
+            const isv = subtotal * 0.15;
+            const total = subtotal + isv;
+            
+            // Actualizar totales
+            document.getElementById('subtotal').textContent = formatearMoneda(subtotal);
+            document.getElementById('isv').textContent = formatearMoneda(isv);
+            document.getElementById('total').textContent = formatearMoneda(total);
+            
+            // Limpiar carrito después de generar la factura
+            if (productos.length > 0) {
+                localStorage.removeItem('byteStoreCart');
+                localStorage.removeItem('byteStoreTotalToPay');
+                console.log('Carrito limpiado después de generar factura');
+            }
+        }
+
+        // Cargar factura cuando se carga la página
+        document.addEventListener('DOMContentLoaded', function() {
+            cargarFactura();
+        });
+
+        // Función para limpiar datos de factura del localStorage
+        function limpiarDatosFactura() {
+            localStorage.removeItem('facturaData');
+        }
+
+        // Limpiar datos después de 5 segundos
+        setTimeout(limpiarDatosFactura, 5000);
+    </script>
+</body>
+</html> 

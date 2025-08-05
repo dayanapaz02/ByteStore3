@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pago de Cuotas - ByteStore v4.0 (ACTUALIZADO)</title>
+    <!-- Bootstrap 5 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/styles.css">
+    <style>
+        .form-container {
+            max-width: 600px;
+            margin: 2rem auto;
+            padding: 2rem;
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+        }
+        .form-title {
+            color: #174aff;
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        .form-label {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+        .form-control {
+            padding: 0.75rem;
+            border: 1px solid #dee2e6;
+            border-radius: 5px;
+        }
+        .form-control:focus {
+            border-color: #174aff;
+            box-shadow: 0 0 0 0.2rem rgba(23,74,255,0.25);
+        }
+        .submit-btn {
+            background: #174aff;
+            color: white;
+            padding: 0.75rem 2rem;
+            border: none;
+            border-radius: 5px;
+            font-weight: 600;
+            width: 100%;
+            margin-top: 1rem;
+        }
+        .submit-btn:hover {
+            background: #0d3fd9;
+        }
+        .required-field::after {
+            content: " *";
+            color: red;
+        }
+    </style>
+</head>
+<body>
+    <!-- Barra de navegación -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container">
+            <a class="navbar-brand" href="index.html">ByteStore</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html">Inicio</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="credito-bytestore.html">Volver a Crédito</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Contenido principal -->
+    <div class="container py-5">
+        <div class="form-container">
+            <h2 class="form-title">Pago de Cuotas</h2>
+            <p class="text-center mb-4">Complete el siguiente formulario para realizar su pago de cuotas</p>
+            
+            <!-- Mostrar el monto total del carrito aquí -->
+            <p class="text-center mb-4" style="font-size: 1.2rem; font-weight: bold;">
+                Monto Total del Carrito: <span id="cartTotalAmount">L0.00</span>
+            </p>
+
+            <form id="pagoForm" class="needs-validation" novalidate>
+                <!-- Campo 1: Nombre Completo -->
+                <div class="form-group">
+                    <label for="nombre_cliente" class="form-label required-field">Nombre Completo</label>
+                    <input type="text" class="form-control" id="nombre_cliente" name="nombre_cliente" required>
+                    <div class="invalid-feedback">
+                        Por favor ingrese su nombre completo
+                    </div>
+                </div>
+
+                <!-- Campo 2: Número de Contrato/Identidad -->
+                <div class="form-group">
+                    <label for="numero_contrato_identidad" class="form-label required-field">Número de Contrato/Identidad</label>
+                    <input type="text" class="form-control" id="numero_contrato_identidad" name="numero_contrato_identidad" required>
+                    <div class="invalid-feedback">
+                        Por favor ingrese su número de contrato o identidad
+                    </div>
+                </div>
+
+                <!-- Campo 3: Dirección -->
+                <div class="form-group">
+                    <label for="direccion_cliente" class="form-label required-field">Dirección</label>
+                    <input type="text" class="form-control" id="direccion_cliente" name="direccion_cliente" required>
+                    <div class="invalid-feedback">
+                        Por favor ingrese su dirección
+                    </div>
+                </div>
+
+                <!-- Campo 4: Teléfono -->
+                <div class="form-group">
+                    <label for="telefono_cliente" class="form-label required-field">Teléfono</label>
+                    <input type="tel" class="form-control" id="telefono_cliente" name="telefono_cliente" required>
+                    <div class="invalid-feedback">
+                        Por favor ingrese su número de teléfono
+                    </div>
+                </div>
+
+                <!-- Campo 5: Monto a Pagar -->
+                <div class="form-group">
+                    <label for="monto_pago" class="form-label required-field">Monto a Pagar</label>
+                    <div class="input-group">
+                        <span class="input-group-text">L</span>
+                        <input type="number" class="form-control" id="monto_pago" name="monto_pago" min="0.01" step="0.01" required>
+                    </div>
+                    <div class="invalid-feedback">
+                        Por favor ingrese un monto válido
+                    </div>
+                </div>
+
+                <!-- Campo 6: Método de Pago -->
+                <div class="form-group">
+                    <label for="metodo_pago" class="form-label required-field">Método de Pago</label>
+                    <select class="form-select" id="metodo_pago" name="metodo_pago" required>
+                        <option value="">Seleccione un método de pago</option>
+                        <option value="tarjeta_credito">Tarjeta de Crédito</option>
+                        <option value="tarjeta_debito">Tarjeta de Débito</option>
+                        <option value="transferencia">Transferencia Bancaria</option>
+                    </select>
+                    <div class="invalid-feedback">
+                        Por favor seleccione un método de pago
+                    </div>
+                </div>
+
+                <!-- Campo 7: Correo Electrónico -->
+                <div class="form-group">
+                    <label for="email" class="form-label required-field">Correo Electrónico</label>
+                    <input type="email" class="form-control" id="email" name="email" required>
+                    <div class="invalid-feedback">
+                        Por favor ingrese un correo electrónico válido
+                    </div>
+                </div>
+                
+                <!-- Botón de Envío -->
+                <button type="submit" class="submit-btn">
+                    <i class="fas fa-credit-card me-2"></i>Realizar Pago
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Validación del formulario
+        (function () {
+            'use strict'
+            var forms = document.querySelectorAll('.needs-validation')
+            Array.prototype.slice.call(forms).forEach(function (form) {
+                form.addEventListener('submit', function (event) {
+                    if (!form.checkValidity()) {
+                        event.preventDefault()
+                        event.stopPropagation()
+                    }
+                    form.classList.add('was-validated')
+                }, false)
+            })
+        })()
+
+        // Script para cargar el monto total del carrito y productos
+        document.addEventListener('DOMContentLoaded', function() {
+            const totalAmount = localStorage.getItem('byteStoreTotalToPay');
+            const cartTotalAmountSpan = document.getElementById('cartTotalAmount');
+            const montoPagoInput = document.getElementById('monto_pago');
+
+            if (totalAmount) {
+                cartTotalAmountSpan.textContent = `L${parseFloat(totalAmount).toFixed(2)}`;
+                montoPagoInput.value = parseFloat(totalAmount).toFixed(2); // Pre-llenar el campo de monto a pagar
+            } else {
+                cartTotalAmountSpan.textContent = 'L0.00';
+                montoPagoInput.value = '0.00';
+            }
+
+            // Debug: verificar productos del carrito
+            const cartItems = localStorage.getItem('byteStoreCart') || '[]';
+            const productos = JSON.parse(cartItems);
+            console.log('=== PRODUCTOS EN CARRITO ===');
+            console.log('Productos:', productos);
+            console.log('Número de productos:', productos.length);
+            
+            if (productos.length > 0) {
+                productos.forEach((producto, index) => {
+                    console.log(`Producto ${index + 1}:`, producto);
+                });
+            } else {
+                console.log('❌ No hay productos en el carrito');
+            }
+        });
+
+        // Event listener para el formulario
+        document.getElementById('pagoForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            if (!this.checkValidity()) {
+                e.stopPropagation();
+                this.classList.add('was-validated');
+                return;
+            }
+
+            // Obtener datos del formulario
+            const formData = new FormData(this);
+            const datos = Object.fromEntries(formData.entries());
+            
+            // Obtener productos del carrito
+            const cartItems = localStorage.getItem('byteStoreCart') || '[]';
+            const productos = JSON.parse(cartItems);
+            
+            // Generar número de factura único
+            const facturaNumero = new Date().getFullYear() + String(Math.floor(Math.random() * 10000)).padStart(4, '0');
+            
+            // Calcular totales
+            let subtotal = parseFloat(datos.monto_pago);
+            if (productos.length > 0) {
+                subtotal = productos.reduce((total, producto) => {
+                    return total + (producto.price * producto.quantity);
+                }, 0);
+            }
+            
+            const isv = subtotal * 0.15;
+            const total = subtotal + isv;
+            
+            // Guardar datos de la factura en localStorage
+            const facturaData = {
+                numero: facturaNumero,
+                cliente: datos.nombre_cliente,
+                direccion: datos.direccion_cliente,
+                telefono: datos.telefono_cliente,
+                monto: subtotal.toFixed(2)
+            };
+            
+            localStorage.setItem('facturaData', JSON.stringify(facturaData));
+            
+            // Mostrar mensaje de éxito y redirigir
+            alert('¡Pago de cuotas procesado con éxito!');
+            window.location.href = 'factura.html';
+        });
+    </script>
+</body>
+</html> 

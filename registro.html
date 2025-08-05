@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Regístrate - Suministros Dayana</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/registro.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+</head>
+<body>
+    <header class="main-header">
+        <div class="header-top-bar">
+            <div class="container">
+                <span class="discount-message">Hasta L10,000 de descuento en tu nuevo smart TV. Compra 👉 <a href="#" class="here-link">aquí.</a></span>
+                <div class="top-links">
+                    <a href="#">Estado de Orden</a>
+                    <a href="#">Soporte</a>
+                    <a href="login.html" class="login-settings">Iniciar Sesión <i class="fas fa-cog"></i></a>
+                </div>
+            </div>
+        </div>
+
+        <div class="header-main-section">
+            <div class="container main-content">
+                <div class="logo">
+                    <a href="index.html">BYTE STORE</a>
+                </div>
+                <div class="search-bar">
+                    <input type="text" placeholder="Buscar productos...">
+                    <button><i class="fas fa-search"></i></button>
+                </div>
+                <div class="user-actions">
+                    <a href="login.html" class="action-item">
+                        <i class="fas fa-sign-in-alt"></i>
+                        <span>Login</span>
+                    </a>
+                    <a href="favoritos.html" class="action-item">
+                        <i class="fas fa-heart"></i>
+                        <span>Favoritos</span>
+                    </a>
+                    <a href="carrito.html" class="action-item">
+                        <i class="fas fa-shopping-cart"></i>
+                        <span>Carrito</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <nav class="main-nav">
+            <div class="container">
+                <ul>
+                    <li><a href="index.html">INICIO</a></li>
+                    <li><a href="marcas.html">MARCAS</a></li>
+                    <li><a href="productos.html">PRODUCTOS</a></li>
+                    <li><a href="exclusivos-online.html">EXCLUSIVOS ONLINE</a></li>
+                    <li><a href="credito-bytestore.html">CRÉDITO BYTE STORE</a></li>
+                    <li><a href="servicio-tecnico.html">SERVICIO TÉCNICO</a></li>
+                    <li><a href="ubicacion.html">UBICACIÓN</a></li>
+                    <li><a href="blog.html">BLOG</a></li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <div class="content-wrapper">
+            <div class="registro-container form-card">
+                <h2>Crear una Cuenta</h2>
+                <form action="php/submit_registration.php" method="POST">
+                    <div class="form-group">
+                        <label for="nombre">Nombre Completo:</label>
+                        <input type="text" id="nombre" name="nombre" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="identidad">Identidad:</label>
+                        <input type="text" id="identidad" name="identidad" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Correo Electrónico:</label>
+                        <input type="email" id="email" name="email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Contraseña:</label>
+                        <input type="password" id="password" name="password" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="confirm_password">Confirmar Contraseña:</label>
+                        <input type="password" id="confirm_password" name="confirm_password" required>
+                    </div>
+                    <button type="submit">Registrarse</button>
+                </form>
+                <p class="mt-3" style="text-align: center; color: #eee; font-size: 0.9em;">
+                    ¿Ya tienes cuenta? <a href="login.html" style="color: #007bff; text-decoration: none;">Inicia sesión aquí</a>
+                </p>
+            </div>
+
+            <div class="registros-table-container form-card">
+                <h2>Usuarios Registrados</h2>
+                <table class="registros-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Nombre</th>
+                            <th>Identidad</th>
+                            <th>Email</th>
+                            <th>Fecha de Registro</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php
+                        // Aquí va el código PHP para mostrar registros
+                        ?>
+                    </tbody>
+                </table>
+
+                <div class="pagination">
+                    <a href="?page=1" class="page-link">&laquo; Primera</a>
+                    <a href="?page=<?php echo $currentPage-1; ?>" class="page-link">&lsaquo; Anterior</a>
+
+                    <?php for($i = 1; $i <= $totalPages; $i++): ?>
+                        <a href="?page=<?php echo $i; ?>" class="page-link <?php echo ($currentPage == $i) ? 'active' : ''; ?>">
+                            <?php echo $i; ?>
+                        </a>
+                    <?php endfor; ?>
+
+                    <a href="?page=<?php echo $currentPage+1; ?>" class="page-link">Siguiente &rsaquo;</a>
+                    <a href="?page=<?php echo $totalPages; ?>" class="page-link">Última &raquo;</a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="main-footer">
+        <div class="container">
+            <p>&copy; 2025 BYTE STORE. Todos los derechos reservados.</p>
+        </div>
+    </footer>
+
+    <!-- Validación simple de contraseñas -->
+    <script>
+        const form = document.querySelector('form');
+        form.addEventListener('submit', function(e) {
+            const pass = document.getElementById('password').value;
+            const confirm = document.getElementById('confirm_password').value;
+            if (pass !== confirm) {
+                e.preventDefault();
+                alert("Las contraseñas no coinciden.");
+            }
+        });
+    </script>
+</body>
+</html>
